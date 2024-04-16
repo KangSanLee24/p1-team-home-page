@@ -177,22 +177,39 @@
             let surname = $('#surname').val();
             let firstname = $('#firstname').val();
             let mbti = $('#mbti').val();
-            let email = $('#email').val();
             let comment = $('#comment').val();
+            let email = $('#email').val();
             let blog = $('#blog').val();
 
-            let doc = {
-                'image': image,
-                'surname': surname,
-                'firstname': firstname,
-                'mbti': mbti,
-                'comment': comment,
-                'blog': blog,
-                'email': email
-            };
-            await addDoc(collection(db, "members"), doc);
-            alert('저장되었습니다.');
-            window.location.reload();
+            if (image.length = 0) {
+                alert('이미지URL을 입력해주세요.');
+            } else if (surname.length = 0) {
+                alert('성을 입력해주세요.');
+            } else if (firstname.length = 0) {
+                alert('이름을 입력해주세요.');
+            } else if (mbti.length = 0) {
+                alert('MBTI를 선택해주세요.');
+            } else if (comment.length = 0) {
+                alert('각오를 입력해주세요.');
+            } else if (email.length = 0) {
+                alert('이메일을 입력해주세요.');
+            } else if (blog.length = 0) {
+                alert('블로그주소를 입력해주세요.');
+            } else {
+                let doc = {
+                    'image': image,
+                    'surname': surname,
+                    'firstname': firstname,
+                    'mbti': mbti,
+                    'comment': comment,
+                    'blog': blog,
+                    'email': email
+                };
+                await addDoc(collection(db, "members"), doc); /*member에 저장*/
+                alert('저장되었습니다.');   
+                window.location.reload(); /*새로고침*/
+            }
+
         })
 
 
@@ -206,7 +223,7 @@
             let firstname = row['firstname'];
             let mbti = row['mbti'];
             let email = row['email'];
-       
+
             let new_card = `
             <div class="col">
                 <div class="card h-100">
