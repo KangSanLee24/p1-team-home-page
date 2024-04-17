@@ -81,7 +81,6 @@
             padding: 30px;
             border: 2px solid yellowgreen;
             border-radius: 5px;
-
         }
 
         .write-down {
@@ -133,6 +132,34 @@
             border-radius: 5px;
             padding: 5px;
         }
+
+        .search-card {
+            background-color: white;
+            width: 500x;
+            height: 200px;
+
+            margin: 25px auto 25px auto;
+            padding: 20px;
+            border: 2px solid yellowgreen;
+            border-radius: 5px;
+        }
+
+        .search-name>label {
+            flex-direction: column;
+            display: flex;
+            margin-top: 3px;
+            padding-left: 5px;
+        }
+
+        .search-name>input {
+            height: 35px;
+            width: 300px;
+
+            border: none;
+            outline: none;
+            border-bottom: 2px solid #BFB9B6;
+
+        }
     </style>
     <script type="module">
         // Firebase SDK 라이브러리 가져오기
@@ -158,17 +185,22 @@
 
         $(document).ready(function () {
             /*추가버튼 팝업 열기*/
-            $('.pop_btn').click(function (event) {
+            $('.pop_btn, #write_btn, #search_btn, #update_btn').click(function (event) {
                 event.preventDefault();
                 var targetID = $(this).attr('href');
                 $(targetID).fadeIn();
             });
 
-
             /*팝업 취소 버튼 팝업 닫기*/
-            $('.cancel_btn').click(function () {
-                $('#wr_popup').fadeOut();
+            $('#cancel_wr, #cancel_search, #cancel_update').click(function () {
+                var popupID = $(this).data('target');
+                $(popupID).fadeOut();
             });
+
+
+
+
+
         });
 
         // 추가하기 버튼 누르면 Firebase에 저장
@@ -181,22 +213,24 @@
             let email = $('#email').val();
             let blog = $('#blog').val();
 
-            if (image.length = 0) {
+            if (image.length === 0) {
                 alert('이미지URL을 입력해주세요.');
-            } else if (surname.length = 0) {
+            } else if (surname.length === 0) {
                 alert('성을 입력해주세요.');
-            } else if (firstname.length = 0) {
+            } else if (firstname.length === 0) {
                 alert('이름을 입력해주세요.');
-            } else if (mbti.length = 0) {
+            } else if (mbti.length === 0) {
                 alert('MBTI를 선택해주세요.');
-            } else if (comment.length = 0) {
+            } else if (comment.length === 0) {
                 alert('각오를 입력해주세요.');
-            } else if (email.length = 0) {
+            } else if (email.length === 0) {
                 alert('이메일을 입력해주세요.');
-            } else if (blog.length = 0) {
+            } else if (blog.length === 0) {
                 alert('블로그주소를 입력해주세요.');
             } else {
-                let doc = {
+                
+            }
+            let doc = {
                     'image': image,
                     'surname': surname,
                     'firstname': firstname,
@@ -205,10 +239,11 @@
                     'blog': blog,
                     'email': email
                 };
-                await addDoc(collection(db, "members"), doc); /*member에 저장*/
-                alert('저장되었습니다.');   
-                window.location.reload(); /*새로고침*/
-            }
+
+            await addDoc(collection(db, "members"), doc); /*member에 저장*/
+            alert('저장되었습니다.');
+            window.location.reload(); /*새로고침*/
+
 
         })
 
@@ -284,11 +319,12 @@
 
     <!-- 추가 수정 삭제 버튼  CSS로 못하겠다...-->
     <div class="memberbtn" style="float: right;">
-        <button><img src="https://cdn.icon-icons.com/icons2/2098/PNG/512/edit_icon_128873.png" width="50px"
+        <button id="search_btn" href="#search_popup"><img
+                src="https://cdn.icon-icons.com/icons2/2098/PNG/512/edit_icon_128873.png" width="50px"
                 title="수정"></button>
-        <a href="#wr_popup" class="pop_btn"><button><img
-                    src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png" width="50px"
-                    title="추가"></button></a>
+        <button id="write_btn" href="#wr_popup"><img
+                src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png" width="50px"
+                title="추가"></button>
         <button><img src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
                 title="삭제"></button>
     </div>
@@ -360,12 +396,108 @@
                 <button id="postingbtn"><img
                         src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
                         width="50px" title="등록"></button>
-                <button class="cancel_btn"><img
+                <button id="cancel_wr" data-target="#wr_popup"><img
                         src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
                         title="취소"></button>
             </div>
         </div>
     </div>
+
+    <!-- 팝업 수정 박스1-->
+    <div id="search_popup" class="popup" style="display: none;">
+        <div class="search-card">
+            <h1>수정할 팀원의 이름을 입력해주세요.</h1>
+            <div class="search-name">
+                <label>
+                    <h5>이름 : </h5>
+                </label>
+                <input type="text" id="surname">
+            </div>
+            <div class="etcbtn" style="float: right;">
+                <button id="update_btn" href="#update_popup"><img
+                        src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
+                        width="50px" title="검색"></button>
+                <button id="cancel_search" data-target="#search_popup"><img
+                        src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
+                        title="취소"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 팝업 수정update 박스2-->
+    <div id="update_popup" class="popup" style="display: none;">
+        <div class="wr-card">
+            <div class="write-down">
+                <label>
+                    <h5>image : </h5>
+                </label>
+                <input type="text" id="serverimage">
+            </div>
+            <div class="write-down">
+                <label>
+                    <h5>성 : </h5>
+                </label>
+                <input type="text" id="serversurname">
+            </div>
+            <div class="write-down">
+                <label>
+                    <h5>이름 : </h5>
+                </label>
+                <input type="text" id="serverfirstname">
+            </div>
+            <div class="write-down">
+                <label>
+                    <h5>MBTI : </h5>
+                </label>
+                <select class="dropdown" id="servermbti">
+                    <option selected></option>
+                    <option value="ISTJ">ISTJ</option>
+                    <option value="ISFJ">ISFJ</option>
+                    <option value="INFJ">INFJ</option>
+                    <option value="INTJ">INTJ</option>
+                    <option value="ISTP">ISTP</option>
+                    <option value="ISFP">ISFP</option>
+                    <option value="INFP">INFP</option>
+                    <option value="INTP">INTP</option>
+                    <option value="ESTP">ESTP</option>
+                    <option value="ESFP">ESFP</option>
+                    <option value="ENFP">ENFP</option>
+                    <option value="ENTP">ENTP</option>
+                    <option value="ESTJ">ESTJ</option>
+                    <option value="ESFJ">ESFJ</option>
+                    <option value="ENFJ">ENFJ</option>
+                    <option value="ENTJ">ENTJ</option>
+                </select>
+            </div>
+            <div class="write-down">
+                <label>
+                    <h5>각오 : </h5>
+                </label>
+                <textarea id="servercomment"></textarea>
+            </div>
+            <div class="write-down">
+                <label>
+                    <h5>이메일 : </h5>
+                </label>
+                <input type="text" id="serveremail">
+            </div>
+            <div class="write-down">
+                <label>
+                    <h5>블로그 : </h5>
+                </label>
+                <input type="text" id="serverblog">
+            </div>
+            <div class="etcbtn" style="float: right;">
+                <button id="update_btn2"><img
+                        src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
+                        width="50px" title="수정"></button>
+                <button id="cancel_update" data-target="#update_popup"><img
+                        src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
+                        title="취소"></button>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
