@@ -10,163 +10,17 @@
 
     <!--CSS 부트스트랩 땡겨오기 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">;
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- CSS -->
+    <link href="home.css" rel="stylesheet">
 
-    <style>
-        /* 폰트 수정필요 */
-        @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
-
-        * {
-            font-family: "Cute Font", sans-serif;
-        }
-
-        .main {
-            color: white;
-            background-image: url(https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg);
-            background-position: center;
-            background-size: cover;
-        }
-
-        .mycards {
-            width: 1200px;
-            margin: 20px auto 20px auto;
-        }
-
-        .mypostingbox {
-            width: 500px;
-            margin: 20px auto 20px auto;
-
-            border: 1px solid white;
-            padding: 5px;
-            border-radius: 5px;
-        }
-
-        /* 버튼 css */
-        .memberbtn {
-            margin-right: 40px;
-            margin-bottom: 40px;
-        }
-
-        .memberbtn button {
-            background: none;
-            border: none;
-            padding: 0;
-            opacity: none;
-        }
-
-
-
-        .popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1050;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* 팝업 css */
-        .wr-card {
-            background-color: white;
-            width: 800px;
-            height: 750px;
-
-            margin: 50px auto 50px auto;
-            padding: 30px;
-            border: 2px solid yellowgreen;
-            border-radius: 5px;
-        }
-
-        .write-down {
-            flex-direction: row;
-            display: flex;
-            margin-top: 30px;
-            padding-left: 50px;
-        }
-
-        .write-down>label {
-            width: 100px;
-            height: 35px;
-
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .write-down>input {
-            height: 35px;
-            width: 300px;
-
-            border: none;
-            outline: none;
-            border-bottom: 2px solid #BFB9B6;
-
-        }
-
-        .write-down>textarea {
-            width: 300px;
-            height: 200px;
-
-            border: 1px solid #BFB9B6;
-            outline: 1px solid #BFB9B6;
-            border-radius: 5px;
-        }
-
-        .etcbtn>button {
-            background: none;
-            border: none;
-            padding: 0;
-        }
-
-        .write-down>select {
-            width: 300px;
-
-            border: 2px solid #BFB9B6;
-            border-radius: 5px;
-            padding: 5px;
-        }
-
-        .search-card {
-            background-color: white;
-            width: 500x;
-            height: 200px;
-
-            margin: 25px auto 25px auto;
-            padding: 20px;
-            border: 2px solid yellowgreen;
-            border-radius: 5px;
-        }
-
-        .search-name>label {
-            flex-direction: column;
-            display: flex;
-            margin-top: 3px;
-            padding-left: 5px;
-        }
-
-        .search-name>input {
-            height: 35px;
-            width: 300px;
-
-            border: none;
-            outline: none;
-            border-bottom: 2px solid #BFB9B6;
-
-        }
-    </style>
     <script type="module">
         // Firebase SDK 라이브러리 가져오기
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyDyD9wb7FVWS4lk-xe6jVjbLeIWZRNGoZY",
@@ -196,15 +50,10 @@
                 var popupID = $(this).data('target');
                 $(popupID).fadeOut();
             });
-
-
-
-
-
         });
 
         // 추가하기 버튼 누르면 Firebase에 저장
-        $("#postingbtn").on('click', async function () {
+        $("#postingbtn").click(async function () {
             let image = $('#image').val();
             let surname = $('#surname').val();
             let firstname = $('#firstname').val();
@@ -212,6 +61,9 @@
             let comment = $('#comment').val();
             let email = $('#email').val();
             let blog = $('#blog').val();
+
+            let timestamp = new Date(); /*마지막으로 저장한 시간*/
+            const docId = surname + firstname; /*document이름을 성+이름*/
 
             if (image.length === 0) {
                 alert('이미지URL을 입력해주세요.');
@@ -228,24 +80,23 @@
             } else if (blog.length === 0) {
                 alert('블로그주소를 입력해주세요.');
             } else {
-                
-            }
-            let doc = {
+                const docRef = doc(db, "members", docId); /*document 중복된 이름 없으면 생성*/
+                let docData = {
                     'image': image,
                     'surname': surname,
                     'firstname': firstname,
                     'mbti': mbti,
                     'comment': comment,
                     'blog': blog,
-                    'email': email
+                    'email': email,
+                    'timestamp': timestamp
                 };
-
-            await addDoc(collection(db, "members"), doc); /*member에 저장*/
-            alert('저장되었습니다.');
-            window.location.reload(); /*새로고침*/
-
-
-        })
+                console.log(docData);
+                await setDoc(docRef, docData); /*member에 저장*/
+                alert('저장되었습니다.');
+                window.location.reload(); /*새로고침*/
+            }
+        });
 
 
         // Firebase에 저장된 값들 카드로 띄우기
@@ -282,8 +133,7 @@
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
             <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
                 <use xlink:href="#bootstrap"></use>
-            </svg>
-        </a>
+            </svg></a>
         <!-- 상단 바 -->
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
             <li><a href="#" class="nav-link px-2 text-danger">saparta</a></li>
@@ -303,17 +153,6 @@
     <!-- 팀원 카드 -->
     <div class="mycards">
         <div id="card" class="row row-cols-1 row-cols-md-3 g-4">
-            <div class="col">
-                <div class="card h-100">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARYAAAC1CAMAAACtbCCJAAAAk1BMVEWstbqrtro2OTmvuL2st72lrbEwMjEpLjBKT1I4OTt/hYqosLWrtrywu8FBREiwub0vMzWVnaBZYGMyNzp6gIOepao3OTdCSUwzNDYyNDRrcHMtMTEyNjo2ODxSWVxgZGeDjY9xeXskKi41PD+OlZmDi41aXF58g4Zjam8zNzRLS02aoKMvLjKfqatfYGJSW10nJyeZu8bwAAAFrklEQVR4nO3Zi3LaOBQGYEvyBWHZkjHYMiYQalNogLbv/3R7JIMh3cx0ptuZhOz/NZOCEW30R5djEQQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI9IiLevirdfeGhpmvq/NT3Sr14Rr64onS4Wr1owxkKtF/1u1xepT0YN79PpzWMGJqaJ+ZIypcJtYpLtfa/FzrTJLLs+VWdDirsGjOl02RnTtvRCPU+HWETkrnl0PekfMhcxNfJLRLEEk5KXq8XdS2nOOS9vLZeGnm7ue6n70kopqRmXVTwRLhZRnKzk1VX8qLE0PKFYgmBC3TPzWydEn/CKl9F4IaenvIvuWkwTLsuW5zlvLG93Ppa0kzy28unCFA8aS1wlkaIJMaHf+9MLC/36wFigv/qBkF4bFtaNCur8sIAoxQpDCUx2iyhaFPt1PTSbt9xuFzfv0qv/jGKh0RJeYpGmH9YSFYjziWK6i+Vgm83GyO9CMddACTYpZbxkOvQvi2FYidk3OdHsPbryN/0Si90I5nsdiK2V9m60pHll+mcjbeQbBCzYJbKc3RIYJktWf7ObTxbLCy2g0TWWjjJajbGIvq0SFZW8mQrXgHahr7QWReGQgCL+QZa7WN6nL3/RfSzNNL8uuor1iaz79hILU2Jjm3UWrG05yfysYZGRq6UPYIhkGENZXjWbcVN/2FFzH0u7mxs5rJxMr22zLZJrLGGU83ga6r3fzv2l3sikHx4ypsLLUk2x8E0WXmjGHjOZ+1jMNHJddcOFnY00x1ss+jnhbaTYopRm74eIprUn8QkJHUS05USuzqVYOF8fi9GniEXPmmFl0HPbTHRhrrEEG5o9mvagSSPrIZallXnKXE23nOS0Wuez6BILT9rB6ZSc37V3f+w+lnia0cJqfBC5jPfZbbRENErmwu9PfHV0V/TG2gnlFU1Mwz37leaMj6Wxq5WlP7Ixn6BuoSDSunKThPYd3qVijEXsTjJZuP3pSNvPVoyxKBV1DY9jU1L9311iyWc36e9+gI/p9WgJ9bbheRZkM97QZLrFsn6SNd0v05SpeVn71edg5UsQKr0sZ9NjlO5iWfpY3E6kL7LsN//9R3Ufi51m7Cx5W4izrOh7OG7QUSLN1vVSZK7KK0LF9NbIzq0t0TkTQumdlathtDR018289+7cn3tdt2RMz6w8ZPuY08I6xiLmhjq79L5TLEvagRnt1cl57Ll+Pl1GC1/NPls5lzHRu0Gw5mYvbrFkdPdDNwa2Ie4koU5VyAoaQc//l1iUyKl4pXWV4rjGIhbJk7SXoyVLubQ93QCknSx/jGvHLRb5GWNhem66sqPqRV1iCVW2bSt7mA/2W1OZJd1Q6kPjaj+q/GnIKLdXUSx0T1TZzaMutDf/iiVITVVVyZGNoyXMal51UTbQmvbiLqUsjkaWptCBCqn0F7TkljRKsh8Nr9lY/Yfhe3fwz/xrElFVTwXZJriL5dg82RmVuI6iHbmpWjdKtDvFNMsiStNoUWwaP1rCeSObWd8XRU/f6Cv6/c/wAQ2nc/Q7ZRN/ZkBTQrsztXCIRVIsVMtIOy6uioo8Kk0EpRTMTMWbpHt5yVenhvtYVMRL3rjKP6avOP45fcxDy73hSerqjEkT7/X9mFesaGWZhqy2vIyusVAaueXcDYKQLdvrEfeTPeW70B9xd4bL0elBY+m7PHf3eOxH3j2/7gIrurwO9CLPu8O4ubhZ1uXdcHKtz8s6SeL2Z1Ifdqm+fCCyXeej7jFP/oNQaOGPTIQIf+kBCwXzJyZCiLFkpVnGBN0SDS2U1rSuFBGjSt8dRrnPity/ONA6eMxQRsOx9S/XmM/rzbaXB26FoWTdJwfXt6tAXWp/9ua7AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgw/kH2iNlm+l+U8MAAAAASUVORK5CYII="
-                        class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">이름 : 이강산</h5>
-                        <p class="card-text">MBTI : 드롭박스</p>
-                        <p class="card-text">이메일</p>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
