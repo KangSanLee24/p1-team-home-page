@@ -1,0 +1,137 @@
+        /* 폰트 수정필요 */
+        @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
+
+        * {
+            font-family: "Cute Font", sans-serif;
+        }
+
+        .main {
+            color: white;
+            background-image: url(https://occ-0-1123-1217.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABeIfo7VL_VDyKnljV66IkR-4XLb6xpZqhpLSo3JUtbivnEW4s60PD27muH1mdaANM_8rGpgbm6L2oDgA_iELHZLZ2IQjG5lvp5d2.jpg?r=e6e.jpg);
+            background-position: center;
+            background-size: cover;
+        }
+
+        .mycards {
+            width: 1200px;
+            margin: 20px auto 20px auto;
+        }
+
+        /* 버튼 css */
+        .memberbtn {
+            margin-right: 40px;
+            margin-bottom: 40px;
+        }
+
+        .memberbtn button {
+            background: none;
+            border: none;
+            padding: 0;
+            opacity: none;
+        }
+
+
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1050;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 팝업 css */
+        .wr-card {
+            background-color: white;
+            width: 800px;
+            height: 750px;
+
+            margin: 50px auto 50px auto;
+            padding: 30px;
+            border: 2px solid yellowgreen;
+            border-radius: 5px;
+        }
+
+        .write-down {
+            flex-direction: row;
+            display: flex;
+            margin-top: 30px;
+            padding-left: 50px;
+        }
+
+        .write-down>label {
+            width: 100px;
+            height: 35px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .write-down>input {
+            height: 35px;
+            width: 300px;
+
+            border: none;
+            outline: none;
+            border-bottom: 2px solid #BFB9B6;
+
+        }
+
+        .write-down>textarea {
+            width: 300px;
+            height: 200px;
+
+            border: 1px solid #BFB9B6;
+            outline: 1px solid #BFB9B6;
+            border-radius: 5px;
+        }
+
+        .etcbtn>button {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .write-down>select {
+            width: 300px;
+
+            border: 2px solid #BFB9B6;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .search-card {
+            background-color: white;
+            width: 500x;
+            height: 200px;
+
+            margin: 25px auto 25px auto;
+            padding: 20px;
+            border: 2px solid yellowgreen;
+            border-radius: 5px;
+        }
+
+        .search-name>label {
+            flex-direction: column;
+            display: flex;
+            margin-top: 3px;
+            padding-left: 5px;
+        }
+
+        .search-name>input {
+            height: 35px;
+            width: 300px;
+
+            border: none;
+            outline: none;
+            border-bottom: 2px solid #BFB9B6;
+
+        }
