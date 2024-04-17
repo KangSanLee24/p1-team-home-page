@@ -172,7 +172,7 @@
         });
 
         // 추가하기 버튼 누르면 Firebase에 저장
-        $("#postingbtn").click(async function () {
+        $("#postingbtn").on('click', async function () {
             let image = $('#image').val();
             let surname = $('#surname').val();
             let firstname = $('#firstname').val();
@@ -181,19 +181,19 @@
             let email = $('#email').val();
             let blog = $('#blog').val();
 
-            if (image.length = 0) {
+            if (image.length === 0) {
                 alert('이미지URL을 입력해주세요.');
-            } else if (surname.length = 0) {
+            } else if (surname.length === 0) {
                 alert('성을 입력해주세요.');
-            } else if (firstname.length = 0) {
+            } else if (firstname.length === 0) {
                 alert('이름을 입력해주세요.');
-            } else if (mbti.length = 0) {
+            } else if (mbti.length === 0) {
                 alert('MBTI를 선택해주세요.');
-            } else if (comment.length = 0) {
+            } else if (comment.length === 0) {
                 alert('각오를 입력해주세요.');
-            } else if (email.length = 0) {
+            } else if (email.length === 0) {
                 alert('이메일을 입력해주세요.');
-            } else if (blog.length = 0) {
+            } else if (blog.length === 0) {
                 alert('블로그주소를 입력해주세요.');
             } else {
                 let doc = {
