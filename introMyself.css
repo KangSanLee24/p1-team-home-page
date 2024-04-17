@@ -42,7 +42,7 @@
             justify-content: center;
         }
 
-        .form_1>input {
+        .form_1>span {
             width: 250px;
             height: 35px;
 
@@ -67,8 +67,9 @@
             margin-right: 550px;
         }
 
-        .form_2>textarea {
+        .form_2>span {
             width: 650px;
+            height: 90px;
             margin-top: 10px;
 
             background: none;
