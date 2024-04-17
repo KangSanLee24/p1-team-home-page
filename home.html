@@ -19,7 +19,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
         import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { getDocs } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import { getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
             apiKey: "AIzaSyDyD9wb7FVWS4lk-xe6jVjbLeIWZRNGoZY",
@@ -49,15 +50,10 @@
                 var popupID = $(this).data('target');
                 $(popupID).fadeOut();
             });
-
-
-
-
-
         });
 
         // 추가하기 버튼 누르면 Firebase에 저장
-        $("#postingbtn").on('click', async function () {
+        $("#postingbtn").click(async function () {
             let image = $('#image').val();
             let surname = $('#surname').val();
             let firstname = $('#firstname').val();
@@ -65,6 +61,9 @@
             let comment = $('#comment').val();
             let email = $('#email').val();
             let blog = $('#blog').val();
+
+            let timestamp= new Date(); /*마지막으로 저장한 시간*/
+            const docId = surname+firstname; /*document이름을 성+이름*/
 
             if (image.length === 0) {
                 alert('이미지URL을 입력해주세요.');
@@ -81,21 +80,23 @@
             } else if (blog.length === 0) {
                 alert('블로그주소를 입력해주세요.');
             } else {
-                let doc = {
+                const docRef = doc(db, "members", docId); /*document 중복된 이름 없으면 생성*/
+                let docData = {
                     'image': image,
                     'surname': surname,
                     'firstname': firstname,
                     'mbti': mbti,
                     'comment': comment,
                     'blog': blog,
-                    'email': email
-                };
-
-                await addDoc(collection(db, "members"), doc); /*member에 저장*/
+                    'email': email,
+                    'timestamp': timestamp
+                }; 
+                console.log(docData);
+                await setDoc(docRef, docData); /*member에 저장*/
                 alert('저장되었습니다.');
                 window.location.reload(); /*새로고침*/
             }
-        })
+        });
 
 
         // Firebase에 저장된 값들 카드로 띄우기
