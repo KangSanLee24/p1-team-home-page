@@ -118,12 +118,16 @@
             let new_card = `
             <div class="col">
                 <div class="card h-100">
-                    <img src="${image}" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">이름 : ${surname}${firstname}</h5>
-                        <p class="card-text">MBTI : ${mbti}</p>
-                        <p class="card-text">이메일 : ${email}</p>
-                    </div>
+                    <a href=introMyself.html>
+                        <div class="cardimg_wrap">
+                            <img src="${image}" alt="..." class="card_img">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">이름 : ${surname}${firstname}</h5>
+                            <p class="card-text">MBTI : ${mbti}</p>
+                            <p class="card-text">이메일 : ${email}</p>
+                        </div>
+                    </a>
                 </div>
             </div>`;
             $('#card').append(new_card);
