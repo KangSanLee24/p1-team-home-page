@@ -204,7 +204,7 @@
         });
 
         // 추가하기 버튼 누르면 Firebase에 저장
-        $("#postingbtn").click(async function () {
+        $("#postingbtn").on('click', async function () {
             let image = $('#image').val();
             let surname = $('#surname').val();
             let firstname = $('#firstname').val();
