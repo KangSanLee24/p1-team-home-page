@@ -47,9 +47,13 @@
             });
 
             /*팝업 취소 버튼 팝업 닫기*/
-            $('#cancel_wr, #cancel_search, #cancel_update').click(function () {
+            $('#cancel_wr, #cancel_search').click(function () {
                 var popupID = $(this).data('target');
                 $(popupID).fadeOut();
+            });
+
+            $('#cancel_update').click(function () {
+                $('.popup').fadeOut(0);
             });
         });
 
