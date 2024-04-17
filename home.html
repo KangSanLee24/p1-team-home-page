@@ -228,9 +228,7 @@
             } else if (blog.length === 0) {
                 alert('블로그주소를 입력해주세요.');
             } else {
-                
-            }
-            let doc = {
+                let doc = {
                     'image': image,
                     'surname': surname,
                     'firstname': firstname,
@@ -240,11 +238,10 @@
                     'email': email
                 };
 
-            await addDoc(collection(db, "members"), doc); /*member에 저장*/
-            alert('저장되었습니다.');
-            window.location.reload(); /*새로고침*/
-
-
+                await addDoc(collection(db, "members"), doc); /*member에 저장*/
+                alert('저장되었습니다.');
+                window.location.reload(); /*새로고침*/
+            }
         })
 
 
