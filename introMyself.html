@@ -148,13 +148,14 @@
                 console.log(`Email: ${email}`);
                 console.log(`Blog URL: ${blog}`);
                 console.log(`Comment: ${comment}`);
+                /*intromyself의 처음 나오는 팀원 카드 내용*/
                 $("#memberimage").attr("src", image);
                 $('#memberfullname').text(surname + firstname);
                 $('#membermbti').text(mbti);
                 $('#memberemail').text(email);
                 $('#memberblog').text(blog);
                 $('#membercomment').text(comment);
-                /* */
+                /*수정하기 버튼 누르면 나오는 팝업에 내용 채워두기 성하고 이름은 수정 불가 */
                 document.getElementById("image").value = image;
                 document.getElementById("surname").value = surname;
                 document.getElementById("firstname").value = firstname;
