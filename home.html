@@ -37,7 +37,6 @@
         const db = getFirestore(app);
 
 
-
         $(document).ready(function () {
             /*추가버튼 팝업 열기*/
             $('.pop_btn, #write_btn, #search_btn, #update_btn').click(function (event) {
@@ -47,9 +46,13 @@
             });
 
             /*팝업 취소 버튼 팝업 닫기*/
-            $('#cancel_wr, #cancel_search, #cancel_update').click(function () {
+            $('#cancel_wr, #cancel_search').click(function () {
                 var popupID = $(this).data('target');
                 $(popupID).fadeOut();
+            });
+
+            $('#cancel_update').click(function () {
+                $('.popup').fadeOut(0);
             });
         });
 
@@ -99,10 +102,8 @@
             }
         });
 
-
         // Firebase에 저장된 값들 카드로 띄우기
         //let docs = await getDocs(query(collection(db, "members"),orderBy("timestamp"))); 
-        /**/
         let docs = await getDocs(query(collection(db, "members"),orderBy("timestamp","desc")));
         /*docs라는 변수에 members의 Document를 가져오는데, "timestamp"필드를 기준으로 최신것부터 정렬(orderBy)해서 query로 저장*/
 
@@ -118,12 +119,16 @@
             let new_card = `
             <div class="col">
                 <div class="card h-100">
-                    <img src="${image}" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">이름 : ${surname}${firstname}</h5>
-                        <p class="card-text">MBTI : ${mbti}</p>
-                        <p class="card-text">이메일 : ${email}</p>
-                    </div>
+                    <a href=introMyself.html?id=${surname}${firstname}>
+                        <div class="cardimg_wrap">
+                            <img src="${image}" alt="..." class="card_img">
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">이름 : ${surname}${firstname}</h5>
+                            <p class="card-text">MBTI : ${mbti}</p>
+                            <p class="card-text">이메일 : ${email}</p>
+                        </div>
+                    </a>
                 </div>
             </div>`;
             $('#card').append(new_card);
@@ -161,7 +166,7 @@
         </div>
     </div>
 
-    <!-- 추가 수정 삭제 버튼  CSS로 못하겠다...-->
+    <!-- 추가 수정 삭제 버튼 -->
     <div class="memberbtn" style="float: right;">
         <button id="search_btn" href="#search_popup"><img
                 src="https://cdn.icon-icons.com/icons2/2098/PNG/512/edit_icon_128873.png" width="50px"
