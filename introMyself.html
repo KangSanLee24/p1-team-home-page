@@ -92,10 +92,6 @@
             
             if (image.length === 0) {
                 alert('이미지URL을 입력해주세요.');
-            } else if (surname.length === 0) {
-                alert('성을 입력해주세요.');
-            } else if (firstname.length === 0) {
-                alert('이름을 입력해주세요.');
             } else if (mbti.length === 0) {
                 alert('MBTI를 선택해주세요.');
             } else if (comment.length === 0) {
@@ -232,13 +228,13 @@
                 <label>
                     <h5>성 : </h5>
                 </label>
-                <input type="text" id="surname">
+                <input type="text" id="surname" readonly>
             </div>
             <div class="write-down">
                 <label>
                     <h5>이름 : </h5>
                 </label>
-                <input type="text" id="firstname">
+                <input type="text" id="firstname" readonly>
             </div>
             <div class="write-down">
                 <label>
