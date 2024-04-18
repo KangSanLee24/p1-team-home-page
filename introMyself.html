@@ -17,10 +17,18 @@
     <script type="module">
         // Firebase SDK 라이브러리 가져오기
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { getDoc, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { orderBy, query, limit } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            setDoc,
+            doc,
+            addDoc,
+            orderBy,
+            query,
+            deleteDoc, // 여기에 deleteDoc도 포함시킴
+            getDoc
+        } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
@@ -49,8 +57,19 @@
             $('.cancel_btn').click(function () {
                 $('#wr_popup').fadeOut();
             });
+        });
 
-
+        $('.delete_btn').click(async function () {
+            const urlParams = new URLSearchParams(window.location.search); // ???? window location search? 
+            const memberId = urlParams.get('id');  // URL에서 ID값 가져옴
+            try {
+                await deleteDoc(doc(db, "members", memberId));
+                alert("삭제되었습니다.");
+                window.location.href = 'home.html';
+            } catch (error) {
+                console.error("문서 삭제 중 오류 발생:", error);
+                alert("문서 삭제에 실패했습니다.");
+            }
         });
 
         $('#savebtn').click(async function () {
@@ -142,7 +161,7 @@
                 document.getElementById("blog").value = blog;
                 document.getElementById("comment").value = comment;
             } else { /*존재안할때 console에 남김*/
-                console.log("No such member found"); 
+                console.log("No such member found");
                 //로그를 남기는게 아니라 alert(페이지를 찾을 수 없다) 뭐 이런거 나오면서 HOME으로 돌아가는 기능?
             }
         }
@@ -164,7 +183,8 @@
             <a href="#wr_popup" class="edit_btn"><button><img
                         src="https://cdn.icon-icons.com/icons2/2098/PNG/512/edit_icon_128873.png" width="50px"
                         title="수정"></button></a>
-            <button><img src="https://cdn-icons-png.flaticon.com/512/70/70287.png" width="50px" title="삭제"></button>
+            <button class="delete_btn"><img src="https://cdn-icons-png.flaticon.com/512/70/70287.png" width="50px"
+                    title="삭제"></button>
         </div>
         <div class="mini_wrap">
             <div class="image">
@@ -257,7 +277,8 @@
                 <input type="text" id="blog">
             </div>
             <div class="etcbtn" style="float: right;">
-                <button id="savebtn"><img src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
+                <button id="savebtn"><img
+                        src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
                         width="50px" title="수정하기"></button>
                 <button class="cancel_btn"><img
                         src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
