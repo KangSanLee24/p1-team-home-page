@@ -220,6 +220,10 @@
             $('#card').append(new_card);
         });
 
+        // 4파르타 버튼
+        $("#maintitle").click(async function () {
+            $('#teamintrobox').toggle();
+        })
     </script>
 
 
@@ -242,9 +246,27 @@
     <!-- 메인타이틀과 팀 소개글 -->
     <div class="main">
         <div class="container-fluid py-5">
-            <h1 class="display-5 fw-bold">4파르타</h1>
+            <h1 id="maintitle" class="display-5 fw-bold">4파르타</h1>
             <p class="col-md-8 fs-4">병든 팀장을 둘러싸고 흉흉한 소문이 떠돈다. 어둠에 뒤덮인 4조, 기이한 역병에 신음하는 팀원. 정체 모를 악에 맞서 팀플을 구원할 희망은
                 오직 OO뿐이다.</p>
+        </div>
+    </div>
+    <!-- 팀 소개 카드 -->
+    <div class="teamintrobox" id="teamintrobox" style="display: none;">
+        <div class="form-floating mb-3">
+            <span type="email" class="form-control" id="title">
+                팀소개설명 1234 4567
+                456789
+                123
+            </span>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="content">
+            <label for="floatingInput">앨범 내용</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="date">
+            <label for="floatingInput">앨범 날짜</label>
         </div>
     </div>
 

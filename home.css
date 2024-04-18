@@ -12,6 +12,16 @@
             background-size: cover;
         }
 
+        .teamintrobox {
+            background-color: green;
+
+            width: 500px;
+            padding: 20px;
+            box-shadow: 0px 0px 3px 0px;
+            border-radius: 5px;
+            margin: 30px auto 0px auto;
+        }
+
         .mycards {
             width: 1200px;
             margin: 20px auto 20px auto;
