@@ -1,3 +1,10 @@
+         /* 폰트 수정필요 */
+         @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+
+         * {
+             font-family: "Gowun Dodum", sans-serif;
+         }
+        
         /* 메인 css */
         .wrap {
             width: 800px;
@@ -8,7 +15,7 @@
             margin-left: 20px;
         }
 
-        .mini_wrap {
+        .mini-wrap {
             border: 2px solid #BFB9B6;
             border-radius: 5px;
         }
@@ -18,11 +25,11 @@
             padding: 15px;
         }
 
-        .member_intro {
+        .member-intro {
             padding: 20px;
         }
 
-        .form_1 {
+        .form-1 {
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -32,7 +39,7 @@
             margin-top: 20px;
         }
 
-        .form_1>label {
+        .form-1>label {
             width: 100px;
             height: 35px;
 
@@ -42,7 +49,7 @@
             justify-content: center;
         }
 
-        .form_1>span {
+        .form-1>span {
             width: 250px;
             height: 35px;
 
@@ -52,7 +59,7 @@
             border-bottom: 2px solid gray;
         }
 
-        .form_2 {
+        .form-2 {
             margin-top: 20px;
             margin-left: 20px;
 
@@ -62,12 +69,12 @@
             justify-content: center;
         }
 
-        .form_2>label {
+        .form-2>label {
             width: 100px;
             margin-right: 550px;
         }
 
-        .form_2>span {
+        .form-2>span {
             width: 650px;
             height: 90px;
             margin-top: 10px;
@@ -77,13 +84,13 @@
             border-radius: 5px;
         }
 
-        .btn_icon {
+        .btn-icon {
             float: right;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        .btn_icon button {
+        .btn-icon button {
             background: none;
             border: none;
             padding: 0px;
@@ -91,7 +98,7 @@
             margin-right: 10px;
         }
 
-        .btn_icon:hover {
+        .btn-icon:hover {
             opacity: 1;
         }
 
