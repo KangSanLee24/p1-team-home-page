@@ -86,13 +86,7 @@
             let comment = $('#comment').val();
             let email = $('#email').val();
             let blog = $('#blog').val();
-
-            const urlParams = new URLSearchParams(window.location.search); // ???? window location search? 
-            const memberId = urlParams.get('id');  // URL에서 ID값 가져옴
-            const docRoute = doc(db, "members", memberId); /*ref or route? 참조 가져옴*/
-            const docFields = await getDoc(docRoute); /* 변수 docFields에 docRoute 참조를 따라갔을 때 나오는 Document의 정보를 넣음.*/
-            const docFieldsTimestamp = docFields.data();
-            let timestamp = docFieldsTimestamp; // 처음 저장한 시간으로 유지
+            let timestamp = new Date(); // 변수 timestamp에 지금 시간을 저장
 
             const docId = surname + firstname; /*document이름을 성+이름*/
             
