@@ -179,3 +179,15 @@
             border-radius: 5px;
             padding: 5px;
         }
+
+        #memberimage {
+            width: 450px;
+            height: 450px;
+            object-fit: cover;
+
+            border-radius: 5px;
+        }
+
+        #membercomment {
+            padding: 8px;
+        }
