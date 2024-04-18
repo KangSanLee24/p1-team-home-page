@@ -151,6 +151,11 @@
             let timestamp = new Date(); /*마지막으로 저장한 시간*/
             const docId = surname + firstname; /*document이름을 성+이름*/
 
+            if (/[\s]/.test(surname) || /[\s]/.test(firstname)) {
+                alert('이름에 공백이 있습니다.');
+                return;
+            }
+
             if (image.length === 0) {
                 alert('이미지URL을 입력해주세요.');
             } else if (surname.length === 0) {

@@ -26,7 +26,7 @@
             addDoc,
             orderBy,
             query,
-            deleteDoc, // 여기에 deleteDoc도 포함시킴
+            deleteDoc,
             getDoc,
             updateDoc // updateDoc도 추가함
 
@@ -63,7 +63,7 @@
         /*삭제버튼 누를시 삭제*/
         $('.delete_btn').click(async function () {
             if (confirm("삭제하시겠습니까?")) {
-                const urlParams = new URLSearchParams(window.location.search); // ???? window location search? 
+                const urlParams = new URLSearchParams(window.location.search);
                 const memberId = urlParams.get('id');  // URL에서 ID값 가져옴
                 try {
                     await deleteDoc(doc(db, "members", memberId));
