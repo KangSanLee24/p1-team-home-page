@@ -95,6 +95,36 @@
                 }
             });
 
+            //카드 선택
+            let checkingcardbool = false;
+            const remove_btn = document.querySelector("#remove_btn");
+            remove_btn.addEventListener("click", () => {
+                const divlist = document.querySelectorAll(".h-100"); //카드 div 전체 불러옴
+                const cardlist = document.querySelectorAll(".checkingcard"); //카드 체크표시 이미지 전체 불러옴
+                console.log(cardlist);
+
+                if (checkingcardbool == false) {
+                    for (let i in divlist) {
+                        divlist[i].insertAdjacentHTML("beforeend", "<img id=\"checkedcard" + i + "\" class=\"checkingcard\" src=\"https://cdn-icons-png.flaticon.com/512/33/33281.png\" style=\"opacity: 0.8; width: 100%; height: 100%; position: absolute; object-fit: contain;\">");
+                        console.log(cardlist);
+                        cardlist[i].addEventListener("click", (a) => {
+                            const cardid = a.target.id;
+                            cardid.style.opacity == "0" ?
+                            document.getElementById(cardid).style.opacity = "0.8" :
+                            document.getElementById(cardid).style.opacity = "0";
+                        });
+                    };
+                    checkingcardbool = true;
+                } else {
+                    for (let i = 0; i < divlist.length; i++) {
+                        cardlist[i].remove()
+                    };
+                    checkingcardbool = false;
+                };
+            });
+
+
+
             /*수정팝업2에 수정하기 버튼 누르면 update됨 */
             $('#complete_update_btn').click(async function () {
                 let image = $('#serverimage').val();
@@ -280,7 +310,7 @@
         <button id="write_btn" href="#wr_popup"><img
                 src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png" width="50px"
                 title="추가"></button>
-        <button><img src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
+        <button id="remove_btn"><img src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
                 title="삭제"></button>
     </div>
 
