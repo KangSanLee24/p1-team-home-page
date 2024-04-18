@@ -49,13 +49,15 @@
             $('.cancel_btn').click(function () {
                 $('#wr_popup').fadeOut();
             });
+
+            
         });
 
         /*문서 이름 받아야됨*/
         async function fetchMemberDetails(memberId) {
             
                 // 'members' 컬렉션에서 memberId에 해당하는 문서를 참조합니다.
-                const docRoute = doc(db, "members", memberId);
+                const docRoute = doc(db, "members", memberId); //ref or route 가져옴
                 const docFields = await getDoc(docRoute); // 문서를 받아옵니다.
 
                 // 문서가 존재하냐
@@ -81,8 +83,7 @@
                     console.log(`Blog URL: ${blog}`);
                     console.log(`Comment: ${comment}`);
                     $("#memberimage").attr("src", image);
-                    //$('#memberimgae').src(image);
-                    $('#membername').text(firstname);
+                    $('#memberfullname').text(surname+firstname);
                     $('#membermbti').text(mbti);
                     $('#memberemail').text(email);
                     $('#memberblog').text(blog);
@@ -92,10 +93,12 @@
                 }
         }
 
-        // 변수 'whoareyou'를 문서 ID로 사용합니다.
-        const whoareyou = "쿵푸팬더"; // EXAMPLE임. 전에 눌렀던 사람마다 만들어야하나?
-        fetchMemberDetails(whoareyou); // 함수 실행
-        /* 클릭하고 문서이름 같이 땡겨오면서 실행해하는데 어케함?*/
+        // 페이지 로드 시 실행
+        window.onload = () => {
+            const urlParams = new URLSearchParams(window.location.search); // ???? window location search?
+            const memberId = urlParams.get('id');  // URL에서 ID값 가져옴
+            fetchMemberDetails(memberId);  // 멤버정보 가져오는 함수 실행
+        }
 
     </script>
 </head>
@@ -117,7 +120,7 @@
             <div class="member_intro">
                 <div class="form_1">
                     <label>이름 :  </label>
-                    <span id="membername"></span>
+                    <span id="memberfullname"></span>
                     <label>MBTI : </label>
                     <span id="membermbti"></span>
                 </div>
