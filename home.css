@@ -175,3 +175,48 @@
             height: 100%;
             object-fit: cover;
         }
+        /*토글 css*/
+        .team-intro-wrap {
+            height: 600px;
+            width: 600px;
+            border: 2px solid gray;
+            border-radius: 5px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            margin: 10px auto 10px auto;
+        }
+
+        .team-mini-wrap {
+            width: 95%;
+            height: 90%;
+            
+            margin-bottom: 10px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-mini-wrap > label {
+            margin-left: -400px;
+        }
+
+        .team-intro {
+            width: 95%;
+            display: inline-block;
+            
+
+            border: 2px solid #BFB9B6;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            height: 100px;
+
+            padding: 10px;
+        }
