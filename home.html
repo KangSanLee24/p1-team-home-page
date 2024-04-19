@@ -87,8 +87,8 @@
                     document.getElementById("serveremail").value = email;
                     document.getElementById("serverblog").value = blog;
                     document.getElementById("servercomment").value = comment;
-                    /*보이게*/
-                    $('#update_popup').fadeIn();
+
+                    $('#update_popup').fadeIn(); /*보이게*/
                 } else { /*존재안할때 console에 남김*/
                     console.log("No such member found");
                     alert('해당 팀원을 찾을 수 없습니다. 이름을 확인해주세요. \n(띄어쓰기 주의!)');
@@ -253,16 +253,28 @@
     <!--토글-->
     <div id="teamintrobox123" class="team-intro-wrap" style="display: none;">
         <div class="team-mini-wrap">
-            <label><h3>팀소개</h3></label>
-            <span class="team-intro">대충 팀 소개</span>
+            <label><h3>팀 소개</h3></label>
+            <span class="team-intro">
+                스파르타 코딩클럽을 지원한 사유는 각각 다르지만 개발자라는 한가지 목표로 모였습니다. 
+                <br>비록, 팀원 한명이 줄어 들었지만 저희는 끝까지 포기하지 않을 것입니다. 
+                <br>오합지졸에서 사합지졸이 된 팀 4파르타를 지켜봐주세요!
+            </span>
         </div>
         <div class="team-mini-wrap">
-            <label><h3>팀소개</h3></label>
-            <span class="team-intro">대충 팀 소개</span>
+            <label><h3>팀 규칙</h3></label>
+            <span class="team-intro">
+                1. 점심시간은 13:00 ~ 14:00
+                <br>2. 저녁 시간은 18:00 ~ 19:00
+                <br>3. 개인 블로그 및 팀프로젝트 현황 회의는 20:30 ~ 21:00
+                <br>4. 캠을 최대한 키고 자리비울때는 상태표시하고 가기
+            </span>
         </div>
         <div class="team-mini-wrap">
-            <label><h3>팀소개</h3></label>
-            <span class="team-intro">대충 팀 소개</span>
+            <label><h3>팀 목표</h3></label>
+            <span class="team-intro">
+                1. 하차하지 말고 살아남기.
+                <br>2. 배운걸 바탕으로 데이터베이스를 구축하고 관리하는 능력 얻기.
+            </span>
         </div>
     </div>
     <!-- 팀 소개 카드 -->

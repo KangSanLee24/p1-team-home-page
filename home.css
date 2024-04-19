@@ -177,7 +177,7 @@
         }
         /*토글 css*/
         .team-intro-wrap {
-            height: 600px;
+            height: 800px;
             width: 600px;
             border: 2px solid gray;
             border-radius: 5px;
@@ -216,7 +216,7 @@
             border: 2px solid #BFB9B6;
             border-radius: 5px;
             margin-bottom: 10px;
-            height: 100px;
+            height: 140px;
 
             padding: 10px;
         }
