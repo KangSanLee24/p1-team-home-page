@@ -6,10 +6,13 @@
 }
 
 .main {
-  color: rgba(255, 30, 0, 0.671);
-  background-image: url(https://resources.chimhaha.net/article/1710149705807-sf2jjy6zzao.jpg);
+  color: rgba(11, 1, 1, 0.671);
+  background-image: url(https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/THIS_IS_SPARTA.svg/1024px-THIS_IS_SPARTA.svg.png);
+  background-repeat: no-repeat;
   background-position: center;
   background-size: 350px;
+
+  line-height: 100px;
 }
 
 .teamintrobox {
