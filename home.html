@@ -1,482 +1,292 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>4파르타</title>
     <!-- JQuary -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!--CSS 부트스트랩 땡겨오기 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
     <!-- CSS -->
-    <link href="home.css" rel="stylesheet">
+    <link href="./style/home.css" rel="stylesheet" />
+    <!-- JavaScript -->
+    <script type="module" src="./src/home.js"></script>
+  </head>
 
-    <script type="module">
-        // Firebase SDK 라이브러리 가져오기
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { getDocs, getDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-        import { orderBy, query, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-            apiKey: "AIzaSyDyD9wb7FVWS4lk-xe6jVjbLeIWZRNGoZY",
-            authDomain: "p1teamhomepage.firebaseapp.com",
-            projectId: "p1teamhomepage",
-            storageBucket: "p1teamhomepage.appspot.com",
-            messagingSenderId: "1064610336155",
-            appId: "1:1064610336155:web:ef624e019c8ce49bae653e",
-            measurementId: "G-5V9LYC2QW3"
-        };
-        // Firebase 인스턴스 초기화
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-
-        $(document).ready(function () {
-            /*추가버튼 팝업 열기*/
-            $('.pop_btn, #write_btn, #search_btn').click(function (event) {
-                event.preventDefault();
-                var targetID = $(this).attr('href');
-                $(targetID).fadeIn();
-            });
-
-            /*팝업 취소 버튼 팝업 닫기*/
-            $('#cancel_wr, #cancel_search').click(function () {
-                var popupID = $(this).data('target');
-                $(popupID).fadeOut();
-            });
-
-            /*수정팝업2에서 취소 누르면 전에 떠있던 수정팝업1까지 다 닫기 */
-            $('#cancel_update').click(function () {
-                $('.popup').fadeOut(0);
-            });
-
-            /*수정팝업1의 검색할때 있으면 불러오고 수정팝업2 띄우고 없으면 알람*/
-            $('#update_btn').click(async function () {
-                var searchMemberId = $('#searchmember').val(); //searchmember 변수에 검색 input에 넣은 문자열을 저장.
-                console.log(searchMemberId); //함 체크
-
-                const docRout = doc(db, "members", searchMemberId); // 변수 searchMemberId의 문자열과 같은 이름을 갖고있는 문서까지 참조 
-                const docFields = await getDoc(docRout); // 변수 docFields에 docRoute 참조를 따라갔을 때 나오는 Document의 정보를 넣음
-
-                /*문서가 존재하냐*/
-                if (docFields.exists()) {
-                    const memberData = docFields.data(); /*변수 memberData에 Document의 정보들을 넣어줌*/
-                    /* 변수 memberDate에 docFields다 들어왔는지 체크 한번*/
-                    console.log(memberData);
-
-                    /* 각 필드 값을 변수로 저장*/
-                    const image = memberData.image;
-                    const surname = memberData.surname;
-                    const firstname = memberData.firstname;
-                    const mbti = memberData.mbti;
-                    const email = memberData.email;
-                    const blog = memberData.blog;
-                    const comment = memberData.comment;
-
-                    /*update_popup에 정보 넣기 (성, 이름은 수정불가)*/
-                    document.getElementById("serverimage").value = image;
-                    document.getElementById("serversurname").value = surname;
-                    document.getElementById("serverfirstname").value = firstname;
-                    document.getElementById("servermbti").value = mbti;
-                    document.getElementById("serveremail").value = email;
-                    document.getElementById("serverblog").value = blog;
-                    document.getElementById("servercomment").value = comment;
-
-                    $('#update_popup').fadeIn(); /*보이게*/
-                } else { /*존재안할때 console에 남김*/
-                    console.log("No such member found");
-                    alert('해당 팀원을 찾을 수 없습니다. 이름을 확인해주세요. \n(띄어쓰기 주의!)');
-                }
-            });
-
-            /*수정팝업2에 수정하기 버튼 누르면 update됨 */
-            $('#complete_update_btn').click(async function () {
-                let image = $('#serverimage').val();
-                let surname = $('#serversurname').val();
-                let firstname = $('#serverfirstname').val();
-                let mbti = $('#servermbti').val();
-                let comment = $('#servercomment').val();
-                let email = $('#serveremail').val();
-                let blog = $('#serverblog').val();
-                let timestamp = new Date(); // 변수 timestamp에 지금 시간을 저장
-
-                const docId = surname + firstname; /*document이름을 성+이름*/
-
-                if (image.length === 0) {
-                    alert('이미지URL을 입력해주세요.');
-                } else if (mbti.length === 0) {
-                    alert('MBTI를 선택해주세요.');
-                } else if (comment.length === 0) {
-                    alert('각오를 입력해주세요.');
-                } else if (email.length === 0) {
-                    alert('이메일을 입력해주세요.');
-                } else if (blog.length === 0) {
-                    alert('블로그주소를 입력해주세요.');
-                } else {
-                    const docRef = doc(db, "members", docId); /*document 중복된 이름 없으면 생성*/
-                    let docData = {
-                        'image': image,
-                        'surname': surname,
-                        'firstname': firstname,
-                        'mbti': mbti,
-                        'comment': comment,
-                        'blog': blog,
-                        'email': email,
-                        'timestamp': timestamp
-                    };
-                    console.log(docData);
-                    await updateDoc(docRef, docData); /*콜렉션 members에 update*/
-                    alert('수정한 내용이 저장되었습니다.');
-                    window.location.reload(); /*새로고침*/
-                }
-            });
-        });
-
-        // 추가하기 버튼 누르면 Firebase에 저장
-        $("#postingbtn").click(async function () {
-            let image = $('#image').val();
-            let surname = $('#surname').val();
-            let firstname = $('#firstname').val();
-            let mbti = $('#mbti').val();
-            let comment = $('#comment').val();
-            let email = $('#email').val();
-            let blog = $('#blog').val();
-
-            let timestamp = new Date(); /*마지막으로 저장한 시간*/
-            const docId = surname + firstname; /*document이름을 성+이름*/
-
-            if (/[\s]/.test(surname) || /[\s]/.test(firstname)) {
-                alert('이름에 공백이 있습니다.');
-                return;
-            }
-
-            if (image.length === 0) {
-                alert('이미지URL을 입력해주세요.');
-            } else if (surname.length === 0) {
-                alert('성을 입력해주세요.');
-            } else if (firstname.length === 0) {
-                alert('이름을 입력해주세요.');
-            } else if (mbti.length === 0) {
-                alert('MBTI를 선택해주세요.');
-            } else if (comment.length === 0) {
-                alert('각오를 입력해주세요.');
-            } else if (email.length === 0) {
-                alert('이메일을 입력해주세요.');
-            } else if (blog.length === 0) {
-                alert('블로그주소를 입력해주세요.');
-            } else {
-                const docRef = doc(db, "members", docId); /*document 중복된 이름 없으면 생성*/
-                let docData = {
-                    'image': image,
-                    'surname': surname,
-                    'firstname': firstname,
-                    'mbti': mbti,
-                    'comment': comment,
-                    'blog': blog,
-                    'email': email,
-                    'timestamp': timestamp
-                };
-                console.log(docData);
-                await setDoc(docRef, docData); /*member에 저장*/
-                alert('저장되었습니다.');
-                window.location.reload(); /*새로고침*/
-            }
-        });
-
-        // Firebase에 저장된 값들 카드로 띄우기
-        //let docs = await getDocs(query(collection(db, "members"),orderBy("timestamp"))); 
-        let docs = await getDocs(query(collection(db, "members"), orderBy("timestamp", "desc")));
-        /*docs라는 변수에 members의 Document를 가져오는데, "timestamp"필드를 기준으로 최신것부터 정렬(orderBy)해서 query로 저장*/
-        docs.forEach((doc) => {
-            let row = doc.data();
-
-            let image = row['image'];
-            let surname = row['surname'];
-            let firstname = row['firstname'];
-            let mbti = row['mbti'];
-            let email = row['email'];
-
-            let new_card = `
-            <div class="col">
-                <div class="card h-100">
-                    <a href=introMyself.html?id=${surname}${firstname}>
-                        <div class="cardimg-wrap">
-                            <img src="${image}" alt="..." class="card-img">
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">이름 : ${surname}${firstname}</h5>
-                            <p class="card-text">MBTI : ${mbti}</p>
-                            <p class="card-text">이메일 : ${email}</p>
-                        </div>
-                    </a>
-                </div>
-            </div>`;
-            $('#card').append(new_card);
-        });
-
-        // 4파르타 버튼
-        $("#maintitle").click(async function () {
-            $('#teamintrobox123').toggle();
-        })
-    </script>
-
-
-</head>
-
-<body>
+  <body>
     <!-- 상단 바 -->
     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-            <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-                <use xlink:href="#bootstrap"></use>
-            </svg></a>
+      <a href="" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+          <use xlink:href="#bootstrap"></use>
+        </svg>
+      </a>
 
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 text-danger">SAPARTA</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">홈</a></li>
-        </ul>
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="#" class="nav-link px-2 text-danger">SAPARTA</a></li>
+        <li><a href="#" class="nav-link px-2 text-white">홈</a></li>
+      </ul>
     </div>
 
     <!-- 메인타이틀과 팀 소개글 -->
     <div class="main">
-        <div class="container-fluid py-5">
-            <h1 id="maintitle" class="display-5 fw-bold">4파르타</h1>
-            <p class="col-md-8 fs-4">팀원이 하차하여도 우리는 물러나지 않는다.</p>
-        </div>
+      <div class="container-fluid py-5">
+        <h1 id="maintitle" class="display-5 fw-bold">4파르타</h1>
+        <p class="col-md-8 fs-4">팀원이 하차하여도 우리는 물러나지 않는다.</p>
+      </div>
     </div>
     <!--토글-->
-    <div id="teamintrobox123" class="team-intro-wrap" style="display: none;">
-        <div class="team-mini-wrap">
-            <label><h3>팀 소개</h3></label>
-            <span class="team-intro">
-                스파르타 코딩클럽을 지원한 사유는 각각 다르지만 개발자라는 한가지 목표로 모였습니다. 
-                <br>비록, 팀원 한명이 줄어 들었지만 저희는 끝까지 포기하지 않을 것입니다. 
-                <br>오합지졸에서 사합지졸이 된 팀 4파르타를 지켜봐주세요!
-            </span>
-        </div>
-        <div class="team-mini-wrap">
-            <label><h3>팀 규칙</h3></label>
-            <span class="team-intro">
-                1. 점심시간은 13:00 ~ 14:00
-                <br>2. 저녁 시간은 18:00 ~ 19:00
-                <br>3. 개인 블로그 및 팀프로젝트 현황 회의는 20:30 ~ 21:00
-                <br>4. 캠을 최대한 키고 자리비울때는 상태표시하고 가기
-            </span>
-        </div>
-        <div class="team-mini-wrap">
-            <label><h3>팀 목표</h3></label>
-            <span class="team-intro">
-                1. 하차하지 말고 살아남기.
-                <br>2. 배운걸 바탕으로 데이터베이스를 구축하고 관리하는 능력 얻기.
-            </span>
-        </div>
+    <div id="teamintrobox123" class="team-intro-wrap" style="display: none">
+      <div class="team-mini-wrap">
+        <label><h3>팀 소개</h3></label>
+        <span class="team-intro">
+          스파르타 코딩클럽을 지원한 사유는 각각 다르지만 개발자라는 한가지 목표로 모였습니다.
+          <br />비록, 팀원 한명이 줄어 들었지만 저희는 끝까지 포기하지 않을 것입니다. <br />오합지졸에서 사합지졸이 된
+          팀 4파르타를 지켜봐주세요!
+        </span>
+      </div>
+      <div class="team-mini-wrap">
+        <label><h3>팀 규칙</h3></label>
+        <span class="team-intro">
+          1. 점심시간은 13:00 ~ 14:00
+          <br />2. 저녁 시간은 18:00 ~ 19:00 <br />3. 개인 블로그 및 팀프로젝트 현황 회의는 20:30 ~ 21:00 <br />4. 캠을
+          최대한 키고 자리비울때는 상태표시하고 가기
+        </span>
+      </div>
+      <div class="team-mini-wrap">
+        <label><h3>팀 목표</h3></label>
+        <span class="team-intro">
+          1. 하차하지 말고 살아남기.
+          <br />2. 배운걸 바탕으로 데이터베이스를 구축하고 관리하는 능력 얻기.
+        </span>
+      </div>
     </div>
     <!-- 팀 소개 카드 -->
-    <div class="teamintrobox" id="teamintrobox" style="display: none;">
-        <div>
-            <span type="email" class="form-control" id="title">
-                팀소개설명 1234 4567
-                <br>1
-                <br>3
-                <br>4
-                <br>5
-                <br>6
-                <br>7
-            </span>
-        </div>
+    <div class="teamintrobox" id="teamintrobox" style="display: none">
+      <div>
+        <span type="email" class="form-control" id="title">
+          팀소개설명 1234 4567
+          <br />1 <br />3 <br />4 <br />5 <br />6 <br />7
+        </span>
+      </div>
     </div>
 
     <!-- 팀원 카드 -->
     <div class="mycards">
-        <div id="card" class="row row-cols-1 row-cols-md-3 g-4">
-        </div>
+      <div id="card" class="row row-cols-1 row-cols-md-3 g-4"></div>
     </div>
 
     <!-- 추가 수정 삭제 버튼 -->
-    <div class="memberbtn" style="float: right;">
-        <button id="search_btn" href="#search_popup"><img
-                src="https://cdn.icon-icons.com/icons2/2098/PNG/512/edit_icon_128873.png" width="50px"
-                title="수정"></button>
-        <button id="write_btn" href="#wr_popup"><img
-                src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png" width="50px"
-                title="추가"></button>
+    <div class="memberbtn" style="float: right">
+      <button id="search_btn" href="#search_popup">
+        <img src="https://cdn.icon-icons.com/icons2/2098/PNG/512/edit_icon_128873.png" width="50px" title="수정" />
+      </button>
+      <button id="write_btn" href="#wr_popup">
+        <img
+          src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
+          width="50px"
+          title="추가"
+        />
+      </button>
     </div>
 
     <!-- 팝업 포스팅 박스-->
-    <div id="wr_popup" class="popup" style="display: none;">
-        <div class="wr-card">
-            <div class="write-down">
-                <label>
-                    <h5>image : </h5>
-                </label>
-                <input type="text" id="image">
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>성 : </h5>
-                </label>
-                <input type="text" id="surname">
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>이름 : </h5>
-                </label>
-                <input type="text" id="firstname">
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>MBTI : </h5>
-                </label>
-                <select class="dropdown" id="mbti">
-                    <option selected></option>
-                    <option value="ISTJ">ISTJ</option>
-                    <option value="ISFJ">ISFJ</option>
-                    <option value="INFJ">INFJ</option>
-                    <option value="INTJ">INTJ</option>
-                    <option value="ISTP">ISTP</option>
-                    <option value="ISFP">ISFP</option>
-                    <option value="INFP">INFP</option>
-                    <option value="INTP">INTP</option>
-                    <option value="ESTP">ESTP</option>
-                    <option value="ESFP">ESFP</option>
-                    <option value="ENFP">ENFP</option>
-                    <option value="ENTP">ENTP</option>
-                    <option value="ESTJ">ESTJ</option>
-                    <option value="ESFJ">ESFJ</option>
-                    <option value="ENFJ">ENFJ</option>
-                    <option value="ENTJ">ENTJ</option>
-                </select>
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>각오 : </h5>
-                </label>
-                <textarea id="comment"></textarea>
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>이메일 : </h5>
-                </label>
-                <input type="text" id="email">
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>블로그 : </h5>
-                </label>
-                <input type="text" id="blog">
-            </div>
-            <div class="etcbtn" style="float: right;">
-                <button id="postingbtn"><img
-                        src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
-                        width="50px" title="등록"></button>
-                <button id="cancel_wr" data-target="#wr_popup"><img
-                        src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
-                        title="취소"></button>
-            </div>
+    <div id="wr_popup" class="popup" style="display: none">
+      <div class="wr-card">
+        <div class="write-down">
+          <label>
+            <h5>image :</h5>
+          </label>
+          <input type="text" id="image" />
         </div>
+        <div class="write-down">
+          <label>
+            <h5>성 :</h5>
+          </label>
+          <input type="text" id="surname" />
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>이름 :</h5>
+          </label>
+          <input type="text" id="firstname" />
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>MBTI :</h5>
+          </label>
+          <select class="dropdown" id="mbti">
+            <option selected></option>
+            <option value="ISTJ">ISTJ</option>
+            <option value="ISFJ">ISFJ</option>
+            <option value="INFJ">INFJ</option>
+            <option value="INTJ">INTJ</option>
+            <option value="ISTP">ISTP</option>
+            <option value="ISFP">ISFP</option>
+            <option value="INFP">INFP</option>
+            <option value="INTP">INTP</option>
+            <option value="ESTP">ESTP</option>
+            <option value="ESFP">ESFP</option>
+            <option value="ENFP">ENFP</option>
+            <option value="ENTP">ENTP</option>
+            <option value="ESTJ">ESTJ</option>
+            <option value="ESFJ">ESFJ</option>
+            <option value="ENFJ">ENFJ</option>
+            <option value="ENTJ">ENTJ</option>
+          </select>
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>각오 :</h5>
+          </label>
+          <textarea id="comment"></textarea>
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>이메일 :</h5>
+          </label>
+          <input type="text" id="email" />
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>블로그 :</h5>
+          </label>
+          <input type="text" id="blog" />
+        </div>
+        <div class="etcbtn" style="float: right">
+          <button id="postingbtn">
+            <img
+              src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
+              width="50px"
+              title="등록"
+            />
+          </button>
+          <button id="cancel_wr" data-target="#wr_popup">
+            <img
+              src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png"
+              width="50px"
+              title="취소"
+            />
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- 팝업 수정(search_popup) 박스1-->
-    <div id="search_popup" class="popup" style="display: none;">
-        <div class="search-card">
-            <h1>수정할 팀원의 이름을 입력해주세요.</h1>
-            <div class="search-name">
-                <label>
-                    <h5>이름 : </h5>
-                </label>
-                <input type="text" id="searchmember">
-            </div>
-            <div class="etcbtn" style="float: right;">
-                <button id="update_btn" href="#update_popup"><img
-                        src="data:image/jpeg;base64,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"
-                        width="50px" title="검색"></button>
-                <button id="cancel_search" data-target="#search_popup"><img
-                        src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
-                        title="취소"></button>
-            </div>
+    <div id="search_popup" class="popup" style="display: none">
+      <div class="search-card">
+        <h1>수정할 팀원의 이름을 입력해주세요.</h1>
+        <div class="search-name">
+          <label>
+            <h5>이름 :</h5>
+          </label>
+          <input type="text" id="searchmember" />
         </div>
+        <div class="etcbtn" style="float: right">
+          <button id="update_btn" href="#update_popup">
+            <img
+              src="data:image/jpeg;base64,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"
+              width="50px"
+              title="검색"
+            />
+          </button>
+          <button id="cancel_search" data-target="#search_popup">
+            <img
+              src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png"
+              width="50px"
+              title="취소"
+            />
+          </button>
+        </div>
+      </div>
     </div>
 
     <!-- 팝업 수정(update_popup) 박스2-->
-    <div id="update_popup" class="popup" style="display: none;">
-        <div class="wr-card">
-            <div class="write-down">
-                <label>
-                    <h5>image : </h5>
-                </label>
-                <input type="text" id="serverimage">
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>성 : </h5>
-                </label>
-                <input type="text" id="serversurname" readonly>
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>이름 : </h5>
-                </label>
-                <input type="text" id="serverfirstname" readonly>
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>MBTI : </h5>
-                </label>
-                <select class="dropdown" id="servermbti">
-                    <option selected></option>
-                    <option value="ISTJ">ISTJ</option>
-                    <option value="ISFJ">ISFJ</option>
-                    <option value="INFJ">INFJ</option>
-                    <option value="INTJ">INTJ</option>
-                    <option value="ISTP">ISTP</option>
-                    <option value="ISFP">ISFP</option>
-                    <option value="INFP">INFP</option>
-                    <option value="INTP">INTP</option>
-                    <option value="ESTP">ESTP</option>
-                    <option value="ESFP">ESFP</option>
-                    <option value="ENFP">ENFP</option>
-                    <option value="ENTP">ENTP</option>
-                    <option value="ESTJ">ESTJ</option>
-                    <option value="ESFJ">ESFJ</option>
-                    <option value="ENFJ">ENFJ</option>
-                    <option value="ENTJ">ENTJ</option>
-                </select>
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>각오 : </h5>
-                </label>
-                <textarea id="servercomment"></textarea>
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>이메일 : </h5>
-                </label>
-                <input type="text" id="serveremail">
-            </div>
-            <div class="write-down">
-                <label>
-                    <h5>블로그 : </h5>
-                </label>
-                <input type="text" id="serverblog">
-            </div>
-            <div class="etcbtn" style="float: right;">
-                <button id="complete_update_btn"><img
-                        src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
-                        width="50px" title="수정"></button>
-                <button id="cancel_update" data-target="#update_popup"><img
-                        src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png" width="50px"
-                        title="취소"></button>
-            </div>
+    <div id="update_popup" class="popup" style="display: none">
+      <div class="wr-card">
+        <div class="write-down">
+          <label>
+            <h5>image :</h5>
+          </label>
+          <input type="text" id="serverimage" />
         </div>
+        <div class="write-down">
+          <label>
+            <h5>성 :</h5>
+          </label>
+          <input type="text" id="serversurname" readonly />
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>이름 :</h5>
+          </label>
+          <input type="text" id="serverfirstname" readonly />
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>MBTI :</h5>
+          </label>
+          <select class="dropdown" id="servermbti">
+            <option selected></option>
+            <option value="ISTJ">ISTJ</option>
+            <option value="ISFJ">ISFJ</option>
+            <option value="INFJ">INFJ</option>
+            <option value="INTJ">INTJ</option>
+            <option value="ISTP">ISTP</option>
+            <option value="ISFP">ISFP</option>
+            <option value="INFP">INFP</option>
+            <option value="INTP">INTP</option>
+            <option value="ESTP">ESTP</option>
+            <option value="ESFP">ESFP</option>
+            <option value="ENFP">ENFP</option>
+            <option value="ENTP">ENTP</option>
+            <option value="ESTJ">ESTJ</option>
+            <option value="ESFJ">ESFJ</option>
+            <option value="ENFJ">ENFJ</option>
+            <option value="ENTJ">ENTJ</option>
+          </select>
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>각오 :</h5>
+          </label>
+          <textarea id="servercomment"></textarea>
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>이메일 :</h5>
+          </label>
+          <input type="text" id="serveremail" />
+        </div>
+        <div class="write-down">
+          <label>
+            <h5>블로그 :</h5>
+          </label>
+          <input type="text" id="serverblog" />
+        </div>
+        <div class="etcbtn" style="float: right">
+          <button id="complete_update_btn">
+            <img
+              src="https://cdn.icon-icons.com/icons2/635/PNG/512/add-button_icon-icons.com_58943.png"
+              width="50px"
+              title="수정"
+            />
+          </button>
+          <button id="cancel_update" data-target="#update_popup">
+            <img
+              src="https://cdn.icon-icons.com/icons2/1337/PNG/512/deletebutton_87299.png"
+              width="50px"
+              title="취소"
+            />
+          </button>
+        </div>
+      </div>
     </div>
-
-</body>
-
+  </body>
 </html>
